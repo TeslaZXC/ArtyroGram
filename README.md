@@ -19,9 +19,9 @@ node server.js``
 
 ### Фронтенд
 
-cd ArtyroGram
+``cd ArtyroGram
 cd frontend
 npm i
-npm run dev
+npm run dev``
 
 после перейдите по http://localhost:5173/
