@@ -1,0 +1,11 @@
+.errorMessage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: red;
+    height: 100vh; 
+    text-align: center;
+}
+  

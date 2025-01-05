@@ -1,0 +1,18 @@
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.user-info span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 15px;
+}

@@ -1,0 +1,44 @@
+.drop-container {
+  width: 100%;
+  max-width: 350px;
+  height: 60px;
+  border: 3px dashed #4e8cff;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f8ff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.drop-container input[type="file"] {
+  display: none;
+}
+
+.drop-container::before {
+  content: 'Кликните сюда, чтобы загрузить аватар';
+  color: #4e8cff;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.drop-container:hover {
+  background-color: #e6f4ff;
+  border-color: #007bff;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+.drop-container:active {
+  background-color: #cfe9ff;
+  border-color: #0056b3;
+}
+
+.drop-container:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(72, 154, 255, 0.6);
+}
