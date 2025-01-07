@@ -39,7 +39,7 @@ export default function CreatePost() {
     formData.append('text', htmlContent); // Add the HTML content to form data
 
     try {
-      const response = await fetch('http://localhost:3000/create-post', {
+      const response = await fetch('http://localhost:3000/posts', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -51,6 +51,7 @@ export default function CreatePost() {
 
       if (response.ok) {
         setMessage('Пост успешно добавлен!');
+        navigate('/'); // Redirect to posts page after successful submission
       } else {
         setMessage(`Ошибка: ${data.error || 'Неизвестная ошибка'}`);
       }
@@ -75,6 +76,7 @@ export default function CreatePost() {
         <div className="formContainer">
           <h1>Создать пост</h1>
           <form onSubmit={handleSubmit}>
+            {/* Image upload input */}
             <input type="file" onChange={handleImageChange} />
             <ReactQuill
               value={text}
@@ -82,11 +84,10 @@ export default function CreatePost() {
               placeholder="Введите текст поста"
               modules={{
                 toolbar: [
-                  [{ 'header': '1'}, { 'header': '2' }, { 'font': [] }],
-                  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                  [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                  [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                   ['bold', 'italic', 'underline'],
                   [{ 'align': [] }],
-                  ['link', 'image'],
                   [{ 'color': [] }, { 'background': [] }],
                   ['blockquote', 'code-block'],
                 ],

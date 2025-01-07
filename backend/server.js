@@ -145,21 +145,76 @@ app.post('/create-post', upload.single('image'), (req, res) => {
   }
 });
 
+// Получение поста по ID
 app.get('/posts/:postId', (req, res) => {
   const postId = req.params.postId;
-
-  const query = 'SELECT * FROM posts WHERE id = ?';
-
-  db.query(query, [postId], (err, result) => {
-    if (err) return res.status(500).json({ error: 'Ошибка базы данных' });
-
-    if (result.length > 0) {
-      res.json(result[0]);
-    } else {
-      res.status(404).json({ error: 'Пост не найден' });
+  db.query('SELECT * FROM posts WHERE id = ?', [postId], (err, result) => {
+    if (err) {
+      console.error('Ошибка в базе данных:', err);
+      return res.status(500).json({ error: 'Database error' });
     }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    res.json(result[0]);
   });
 });
+app.get('/posts/:postId/comments', (req, res) => {
+  const postId = req.params.postId;
+  db.query('SELECT * FROM comments WHERE post_id = ?', [postId], (err, comments) => {
+    if (err) {
+      console.error('Ошибка при получении комментариев:', err);
+      return res.status(500).json({ error: 'Error fetching comments' });
+    }
+    res.json(comments);
+  });
+});
+app.post('/posts/:postId/comments', (req, res) => {
+  const postId = req.params.postId;
+  const { text } = req.body;
+  const token = req.headers.authorization?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Token not provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const email = decoded.email;
+
+    // Получаем userName по email
+    db.query('SELECT name FROM users WHERE email = ?', [email], (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Database error' });
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      const userName = result[0].name;
+
+      // Добавляем комментарий с userName
+      const query = 'INSERT INTO comments (post_id, user_name, text) VALUES (?, ?, ?)';
+      db.query(query, [postId, userName, text], (err, result) => {
+        if (err) {
+          return res.status(500).json({ error: 'Error adding comment' });
+        }
+
+        const newComment = {
+          id: result.insertId,
+          text,
+          user_name: userName,
+        };
+
+        res.status(201).json(newComment);
+      });
+    });
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+});
+
 
 app.listen(3000, () => {
   console.log('Сервер запущен на порту 3000');
