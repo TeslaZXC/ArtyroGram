@@ -14,6 +14,7 @@ import './Styles/Post.css'
 import './Styles/PostCreation.css'
 import './Styles/User.css'
 import './Styles/ErrorMessage.css'
+import './Styles/FullPost.css'
 
 createRoot(document.getElementById('root')).render(
   

@@ -1,35 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 export default function CreatePost() {
   const [image, setImage] = useState(null);
+  const [text, setText] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  // Check if the user is logged in (token is available in localStorage)
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      // If no token, redirect or display error message
       setMessage('Ошибка: зайдите в свой аккаунт');
     }
-  }, []); // This useEffect will run once on component mount
+  }, []);
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };
 
+  const handleTextChange = (value) => {
+    setText(value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token');  // Check for token again on form submission
+    const token = localStorage.getItem('token');
     if (!token) {
       setMessage('Ошибка: зайдите в свой аккаунт');
-      return; // Prevent form submission if no token
+      return;
     }
 
     const formData = new FormData();
     formData.append('image', image);
+    const htmlContent = text; // ReactQuill stores HTML content
+    formData.append('text', htmlContent); // Add the HTML content to form data
 
     try {
       const response = await fetch('http://localhost:3000/create-post', {
@@ -45,7 +52,7 @@ export default function CreatePost() {
       if (response.ok) {
         setMessage('Пост успешно добавлен!');
       } else {
-        setMessage(`Ошибка: ${data.error}`);
+        setMessage(`Ошибка: ${data.error || 'Неизвестная ошибка'}`);
       }
     } catch (error) {
       console.error('Ошибка:', error);
@@ -54,23 +61,40 @@ export default function CreatePost() {
   };
 
   const handleLogout = () => {
-    navigate('/'); // Redirect to the login page
+    navigate('/'); // Redirect to the home page or login page
   };
 
   return (
     <div className="createPostWrapper">
-      <button className="button" id="logoutButton" onClick={handleLogout}>Выйти</button>
+      <button className="buttonExit" id="logoutButton" onClick={handleLogout}>
+        Выйти
+      </button>
       {message ? (
-        <div className="errorMessage">{message}</div> // Display error message on the whole screen if no token
+        <div className="errorMessage">{message}</div>
       ) : (
         <div className="formContainer">
           <h1>Создать пост</h1>
           <form onSubmit={handleSubmit}>
-            <input
-              type="file"
-              onChange={handleImageChange}
+            <input type="file" onChange={handleImageChange} />
+            <ReactQuill
+              value={text}
+              onChange={handleTextChange}
+              placeholder="Введите текст поста"
+              modules={{
+                toolbar: [
+                  [{ 'header': '1'}, { 'header': '2' }, { 'font': [] }],
+                  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                  ['bold', 'italic', 'underline'],
+                  [{ 'align': [] }],
+                  ['link', 'image'],
+                  [{ 'color': [] }, { 'background': [] }],
+                  ['blockquote', 'code-block'],
+                ],
+              }}
             />
-            <button type="submit" className="submitButton" disabled={!image}>Добавить пост</button>
+            <button type="submit" className="submitButton" disabled={!image || !text}>
+              Добавить пост
+            </button>
           </form>
           {message && <p>{message}</p>}
         </div>

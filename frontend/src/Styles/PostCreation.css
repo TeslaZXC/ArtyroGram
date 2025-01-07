@@ -1,29 +1,83 @@
 .createPostWrapper {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.buttonExit {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.buttonExit:hover {
+  background-color: #ff0000;
+}
+
+.buttonExit:focus {
+  outline: none;
+}
+
+.formContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  position: relative;
-  padding: 0 20px;
+  width: 100%;
 }
 
-#logoutButton {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+input[type="file"] {
+  margin-bottom: 15px;
+}
+
+.ql-container {
+  width: 100%;
+  max-width: 100%;
+  max-height: 400px; 
+  overflow-y: auto; 
+}
+
+.ql-editor {
+  white-space: normal; 
+  word-wrap: break-word;
+  overflow-wrap: break-word; 
+  max-height: 100%; 
+  padding: 10px;
+}
+
+.submitButton {
   padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.file-upload-label {
-display: inline-block;
-padding: 10px 20px;
-background-color: #007bff;
-color: white;
-cursor: pointer;
-border-radius: 5px;
+.submitButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-.file-upload-input {
-display: none;
+.submitButton:hover {
+  background-color: #45a049;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 16px;
+  margin-top: 20px;
 }

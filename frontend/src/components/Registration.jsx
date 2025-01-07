@@ -49,7 +49,7 @@ export default function Registration() {
     formData.append('name', name);
     formData.append('password', password);
     if (avatar) {
-      formData.append('avatar', avatar); // Добавляем файл аватара
+      formData.append('avatar', avatar);
     }
 
     try {
